@@ -3,20 +3,6 @@ from rest_framework import serializers
 from . import models
 
 
-def validate_password(password):
-    if len(password) < 8:
-        raise serializers.ValidationError('Пароль должен быть длиннее 8 символов')
-    if not any(value.isdigit() for value in password):
-        raise serializers.ValidationError('В пароле должны присутсвовать цифры')
-    if not any(value.isupper() for value in password):
-        raise serializers.ValidationError('В пароле должны быть заглавные буквы')
-    if not any(value.islower() for value in password):
-        raise serializers.ValidationError('В пароле должны быть прописные буквы')
-    if not any(value in '!@#$%^&*()_-[]{}<>' for value in password):
-        raise serializers.ValidationError('В пароле должны быть спецсимволы')
-    return password
-
-
 class UserRegisterSerializer(serializers.ModelSerializer):
     phone_number = serializers.CharField(max_length=13)
     short_info = serializers.CharField()
