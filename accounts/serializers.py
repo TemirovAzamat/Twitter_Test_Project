@@ -26,13 +26,26 @@ class UserRegisterSerializer(serializers.ModelSerializer):
         model = models.User
         fields = ['username', 'password', 'password2', 'profile_image', 'phone_number', 'short_info']
         extra_kwargs = {
-            'password': {'write_only': True, 'validators': [validate_password]},
+            'password': {'write_only': True},
         }
 
     def validate(self, data):
         if data['password'] != data['password2']:
             raise serializers.ValidationError('Пароли не совпадают')
         return data
+
+    def validate_password(self, password):
+        if len(password) < 8:
+            raise serializers.ValidationError('Пароль должен быть длиннее 8 символов')
+        if not any(value.isdigit() for value in password):
+            raise serializers.ValidationError('В пароле должны присутсвовать цифры')
+        if not any(value.isupper() for value in password):
+            raise serializers.ValidationError('В пароле должны быть заглавные буквы')
+        if not any(value.islower() for value in password):
+            raise serializers.ValidationError('В пароле должны быть прописные буквы')
+        if not any(value in '!@#$%^&*()_-[]{}<>' for value in password):
+            raise serializers.ValidationError('В пароле должны быть спецсимволы')
+        return password
 
     def create(self, validated_data):
         user = models.User(
