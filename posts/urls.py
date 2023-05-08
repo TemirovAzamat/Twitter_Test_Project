@@ -4,8 +4,8 @@ from rest_framework.routers import DefaultRouter
 from .views import TweetViewSetAPIView, ReplyViewSetAPIView
 
 router = DefaultRouter()
-router.register('tweets', TweetViewSetAPIView)
-router.register('replies', ReplyViewSetAPIView)
+router.register('tweet', TweetViewSetAPIView)
+router.register('reply', ReplyViewSetAPIView)
 
 
 urlpatterns = [
