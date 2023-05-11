@@ -20,7 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-7$-1(=84-n_#bux8sh=g1t7nm3vc^%d_f#0bz3--%z&hxq7_#u'
+SECRET_KEY = 'django-insecure-(esi8t+%&v98-4#4@o5r-br!plq+zi+e_l#gt03-k))*(om01w'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -41,8 +41,9 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
 
-    'accounts',
     'posts',
+    'accounts',
+
 ]
 
 MIDDLEWARE = [
@@ -81,12 +82,8 @@ WSGI_APPLICATION = 'twit_proj.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'Twitter',
-        'USER': 'postgres',
-        'PASSWORD': 'qwerty',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 

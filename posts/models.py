@@ -1,31 +1,49 @@
-from django.db import models as m
+from django.db import models
 
 from accounts.models import Profile
 
 
 def tweet_image_store(instance, filename):
-    return f'profile/{instance.profile.user.username}/{instance.created_at}/{filename}'
+    return f'profile/{instance.profile.user.username}/{instance.created_add}/{filename}'
 
 
-class Tweet(m.Model):
-    text = m.CharField(max_length=140)
-    image = m.ImageField(
-        upload_to=tweet_image_store, null=True, blank=True
-    )
-    created_at = m.DateTimeField(auto_now_add=True)
-    updated_at = m.DateTimeField(auto_now=True)
-    profile = m.ForeignKey(Profile, on_delete=m.PROTECT)
+class Tweet(models.Model):
+    text = models.CharField(max_length=140)
+    image = models.ImageField(upload_to=tweet_image_store, null=True, blank=True)
+    created_add = models.DateTimeField(auto_now_add=True)
+    updated_ad = models.DateTimeField(auto_now=True)
+    profile = models.ForeignKey(Profile, on_delete=models.PROTECT)
 
     def __str__(self):
         return self.text
 
 
-class Reply(m.Model):
-    tweet = m.ForeignKey(Tweet, on_delete=m.CASCADE)
-    text = m.CharField(max_length=140)
-    created_at = m.DateTimeField(auto_now_add=True)
-    updated_at = m.DateTimeField(auto_now=True)
-    profile = m.ForeignKey(Profile, on_delete=m.PROTECT)
+class Reply(models.Model):
+    tweet = models.ForeignKey(Tweet, on_delete=models.CASCADE)
+    text = models.CharField(max_length=140)
+    created_add = models.DateTimeField(auto_now_add=True)
+    updated_ad = models.DateTimeField(auto_now=True)
+    profile = models.ForeignKey(Profile, on_delete=models.PROTECT)
 
     def __str__(self):
         return self.text
+
+
+class ReactionType(models.Model):
+    id = models.SmallIntegerField(primary_key=True)
+    name = models.CharField(max_length=20)
+
+    def __str__(self):
+        return self.name
+
+
+class Reaction(models.Model):
+    tweet = models.ForeignKey(Tweet, on_delete=models.CASCADE)
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    reaction = models.ForeignKey(ReactionType, on_delete=models.SET_DEFAULT, default=1)
+
+    def __str__(self):
+        return f'{self.tweet} - {self.profile} - {self.reaction}'
+
+    class Meta:
+        unique_together = ['tweet', 'profile']

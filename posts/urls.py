@@ -1,26 +1,15 @@
 from django.urls import path, include
-from rest_framework.routers import DefaultRouter
+from rest_framework import routers
 
-from .views import TweetViewSetAPIView, ReplyViewSetAPIView
+from . import views
 
-router = DefaultRouter()
-router.register('tweet', TweetViewSetAPIView)
-router.register('reply', ReplyViewSetAPIView)
-
+router = routers.DefaultRouter()
+router.register('tweet', views.TweetViewSet, basename='tweet')
+router.register('reaction_type', views.ReactionTypeViewSet)
 
 urlpatterns = [
-    # path('viewset/tweets/', TweetViewSetAPIView.as_view(
-    #     {'get': 'list', 'post': 'create'}
-    # )),
-    # path('viewset/tweets/<int:pk>/', TweetViewSetAPIView.as_view(
-    #     {'get': 'retrieve', 'put': 'update', 'delete': 'destroy'}
-    # )),
-    #
-    # path('viewset/posts/', ReplyViewSetAPIView.as_view(
-    #     {'get': 'list', 'post': 'create'}
-    # )),
-    # path('viewset/posts/<int:pk>/', ReplyViewSetAPIView.as_view(
-    #     {'get': 'retrieve', 'put': 'update', 'delete': 'destroy'}
-    # )),
-    path('viewset/', include(router.urls))
+    path('', include(router.urls)),
+    path('tweet/<int:tweet_id>/reply/', views.ReplyListCreateAPIView.as_view()),
+    path('tweet/<int:tweet_id>/reply/<int:pk>/', views.ReplyRetrieveUpdateDestroyAPIView.as_view()),
+    # path('tweet/<int:tweet_id>/reaction/', views.ReactionCreateAPIView.as_view())
 ]
