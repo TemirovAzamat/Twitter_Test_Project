@@ -91,7 +91,6 @@ class ReplyReactionListCreateAPIView(generics.ListCreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(
-            tweet_id=self.kwargs['tweet_id'],
             reply_id=self.kwargs['reply_id'],
             profile=self.request.user.profile
         )

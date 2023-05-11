@@ -50,7 +50,6 @@ class Reaction(models.Model):
 
 
 class ReplyReaction(models.Model):
-    tweet = models.ForeignKey(Tweet, on_delete=models.CASCADE)
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
     reply = models.ForeignKey(Reply, on_delete=models.CASCADE)
     reaction = models.ForeignKey(ReactionType, on_delete=models.SET_DEFAULT, default=1)
@@ -59,4 +58,4 @@ class ReplyReaction(models.Model):
         return self.reply
 
     class Meta:
-        unique_together = ['tweet', 'profile', 'reply']
+        unique_together = ['profile', 'reply']
