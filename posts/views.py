@@ -90,7 +90,6 @@ class ReplyReactionListCreateAPIView(generics.ListCreateAPIView):
     permission_classes = [perm.IsAuthorOrIsAuthenticated]
 
     def perform_create(self, serializer):
-        tweet = models.Tweet.objects.get(pk=self.kwargs['tweet_id'])
         serializer.save(
             tweet_id=self.kwargs['tweet_id'],
             reply_id=self.kwargs['reply_id'],
