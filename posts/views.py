@@ -3,23 +3,29 @@ from rest_framework import generics
 from rest_framework import permissions
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework.generics import get_object_or_404
+from rest_framework import filters
+from rest_framework.pagination import LimitOffsetPagination
 
 from . import permissions as perm
 from . import models
 from . import serializers
+from . import paginations
 
 
 class TweetViewSet(viewsets.ModelViewSet):
     queryset = models.Tweet.objects.all()
     serializer_class = serializers.TweetSerializer
     permission_classes = [perm.IsAuthorOrIsAuthenticated, ]
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    # pagination_class = paginations.TweetNumberPagination
+    pagination_class = LimitOffsetPagination
+    search_fields = ['text', 'profile__user__username']
+    ordering_fields = ['updated_at', 'profile__user_id']
 
     def perform_create(self, serializer):
-        serializer.save(profile=self.request.user.profile)
 
-    # @action(methods=['GET'],detail=False, url_path='reaction_url')
-    # def reaction(self, request, pk=None):
-    #     return Response({'key': 'value'})
+        serializer.save(profile=self.request.user.profile)
 
     @action(methods=['POST'], detail=True,
             serializer_class=serializers.ReactionSerializer,
@@ -91,6 +97,6 @@ class ReplyReactionListCreateAPIView(generics.ListCreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(
-            reply_id=self.kwargs['reply_id'],
+            reply=get_object_or_404(models.Reply, pk=self.kwargs['reply_id']),
             profile=self.request.user.profile
         )

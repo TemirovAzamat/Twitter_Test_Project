@@ -10,9 +10,29 @@ def tweet_image_store(instance, filename):
 class Tweet(models.Model):
     text = models.CharField(max_length=140)
     image = models.ImageField(upload_to=tweet_image_store, null=True, blank=True)
-    created_add = models.DateTimeField(auto_now_add=True)
-    updated_ad = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     profile = models.ForeignKey(Profile, on_delete=models.PROTECT)
+
+    def all_reactions(self):
+        result = {}
+        for rtype in ReactionType.objects.all():
+            result[rtype.name] = 0
+        for reaction in self.reactions.all():
+            result[reaction.reaction.name] += 1
+
+        return result
+
+    def get_reactions(self):
+        reactions = self.reactions.all()
+        result = {}
+        for reaction in reactions:
+            if result.get(reaction.reaction.name):
+                result[reaction.reaction.name] += 1
+            else:
+                result[reaction.reaction.name] = 1
+
+        return result
 
     def __str__(self):
         return self.text
@@ -38,7 +58,7 @@ class ReactionType(models.Model):
 
 
 class Reaction(models.Model):
-    tweet = models.ForeignKey(Tweet, on_delete=models.CASCADE)
+    tweet = models.ForeignKey(Tweet, on_delete=models.CASCADE, related_name='reactions')
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
     reaction = models.ForeignKey(ReactionType, on_delete=models.SET_DEFAULT, default=1)
 
