@@ -12,5 +12,5 @@ urlpatterns = [
     path('tweet/<int:tweet_id>/reply/', views.ReplyListCreateAPIView.as_view()),
     path('tweet/<int:tweet_id>/reply/<int:pk>/', views.ReplyRetrieveUpdateDestroyAPIView.as_view()),
 
-    path('tweet/<int:tweet_id>/reply/<int:reply_id>/reaction', views.ReplyReactionListCreateAPIView.as_view())
+    path('tweet/<int:tweet_id>/reply/<int:reply_id>/reaction', views.ReplyReactionCreateAPIView.as_view())
 ]

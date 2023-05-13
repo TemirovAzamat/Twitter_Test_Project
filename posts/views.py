@@ -70,7 +70,7 @@ class ReplyListCreateAPIView(generics.ListCreateAPIView):
         serializer.save(profile=self.request.user.profile, tweet_id=self.kwargs['tweet_id'])
 
 
-class ReplyReactionListCreateAPIView(generics.ListCreateAPIView):
+class ReplyReactionCreateAPIView(generics.CreateAPIView):
     queryset = models.ReplyReaction.objects.all()
     serializer_class = serializers.ReplyReactionSerializer
     permission_classes = [perm.IsAuthorOrIsAuthenticated]
