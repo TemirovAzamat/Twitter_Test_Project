@@ -58,6 +58,10 @@ class ReplyListCreateAPIView(generics.ListCreateAPIView):
     queryset = models.Reply.objects.all()
     serializer_class = serializers.ReplySerializer
     permission_classes = [permissions.IsAuthenticated, perm.IsAuthorOrIsAuthenticated]
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    pagination_class = LimitOffsetPagination
+    search_fields = ['text']
+    ordering_fields = ['updated_at']
 
     def get_queryset(self):
         return super().get_queryset().filter(tweet_id=self.kwargs['tweet_id'])
@@ -70,10 +74,6 @@ class ReplyReactionListCreateAPIView(generics.ListCreateAPIView):
     queryset = models.ReplyReaction.objects.all()
     serializer_class = serializers.ReplyReactionSerializer
     permission_classes = [perm.IsAuthorOrIsAuthenticated]
-    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
-    pagination_class = LimitOffsetPagination
-    search_fields = ['reply__text']
-    ordering_fields = ['reply__updated_at']
 
     def perform_create(self, serializer):
         serializer.save(
