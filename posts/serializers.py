@@ -15,7 +15,7 @@ class TweetSerializer(serializers.ModelSerializer):
 
 
 class ReplySerializer(serializers.ModelSerializer):
-    reactions = serializers.ReadOnlyField(source='get_reactions')
+    get_reactions = serializers.ReadOnlyField()
 
     class Meta:
         model = models.Reply
