@@ -45,20 +45,6 @@ class ReactionTypeViewSet(viewsets.ModelViewSet):
     permission_classes = [perm.IsAdminOrReadOnly]
 
 
-class ReplyViewSet(viewsets.ModelViewSet):
-    queryset = models.Reply.objects.all()
-    serializer_class = serializers.ReplySerializer
-    permission_classes = [perm.IsAuthorOrIsAuthenticated]
-
-    def get_queryset(self):
-        return super().get_queryset().filter(tweet_id=self.kwargs['tweet_id'])
-
-    def perform_create(self, serializer):
-        tweet_id = self.kwargs['tweet_id']
-        tweet = models.Tweet.objects.get(id=tweet_id)
-        serializer.save(tweet=tweet)
-
-
 class ReplyRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = models.Reply.objects.all()
     serializer_class = serializers.ReplySerializer
@@ -80,20 +66,14 @@ class ReplyListCreateAPIView(generics.ListCreateAPIView):
         serializer.save(profile=self.request.user.profile, tweet_id=self.kwargs['tweet_id'])
 
 
-# class ReactionCreateAPIView(generics.CreateAPIView):
-#     queryset = Reaction.objects.all()
-#     serializer_class = ReactionSerializer
-#     authentication_classes = [TokenAuthentication, BasicAuthentication, SessionAuthentication]
-#     permission_classes = [permissions.IsAuthenticated]
-#
-#     def perform_create(self, serializer):
-#         serializer.save(profile=self.request.user.profile, tweet_id=self.kwargs['tweet_id'])
-
-
 class ReplyReactionListCreateAPIView(generics.ListCreateAPIView):
     queryset = models.ReplyReaction.objects.all()
     serializer_class = serializers.ReplyReactionSerializer
     permission_classes = [perm.IsAuthorOrIsAuthenticated]
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    pagination_class = LimitOffsetPagination
+    search_fields = ['reply__text']
+    ordering_fields = ['reply__updated_at']
 
     def perform_create(self, serializer):
         serializer.save(

@@ -41,9 +41,20 @@ class Tweet(models.Model):
 class Reply(models.Model):
     tweet = models.ForeignKey(Tweet, on_delete=models.CASCADE)
     text = models.CharField(max_length=140)
-    created_add = models.DateTimeField(auto_now_add=True)
-    updated_ad = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     profile = models.ForeignKey(Profile, on_delete=models.PROTECT)
+
+    def get_reactions(self):
+        reactions = self.reply_reactions.all()
+        result = {}
+        for reaction in reactions:
+            if result.get(reaction.reaction.name):
+                result[reaction.reaction.name] += 1
+            else:
+                result[reaction.reaction.name] = 1
+        return result
+
 
     def __str__(self):
         return self.text
@@ -71,7 +82,7 @@ class Reaction(models.Model):
 
 class ReplyReaction(models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    reply = models.ForeignKey(Reply, on_delete=models.CASCADE)
+    reply = models.ForeignKey(Reply, on_delete=models.CASCADE, related_name='reply_reactions')
     reaction = models.ForeignKey(ReactionType, on_delete=models.SET_DEFAULT, default=1)
 
     def __str__(self):
