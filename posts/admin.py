@@ -51,7 +51,7 @@ class ReactionTypeAdmin(admin.ModelAdmin):
 
 @admin.register(models.Reply)
 class ReplyAdmin(admin.ModelAdmin):
-    list_display = ['profile', 'get_fullname', 'get_short_text', 'created_at', 'get_reactions_str', 'get_tweet_id']
+    list_display = ['id', 'profile', 'get_fullname', 'get_short_text', 'created_at', 'get_reactions_str', 'get_tweet_id']
     date_hierarchy = 'created_at'
     actions_on_bottom = True
     actions_on_top = False
@@ -60,6 +60,7 @@ class ReplyAdmin(admin.ModelAdmin):
     list_display_links = ['get_short_text', ]
     list_editable = ['profile']
     search_fields = ['text', 'profile__user__first_name', 'profile__user__last_name']
+    sortable_by = ['id', 'created_at']
 
     @admin.display(description='Fullname')
     def get_fullname(self, obj):
