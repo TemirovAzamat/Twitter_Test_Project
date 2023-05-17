@@ -55,6 +55,10 @@ class Reply(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     profile = models.ForeignKey(Profile, on_delete=models.PROTECT)
 
+    class Meta:
+        verbose_name = 'Ответ'
+        verbose_name_plural = 'Ответы'
+
     def get_reactions(self):
         reactions = self.reply_reactions.all()
         result = {}
@@ -64,6 +68,12 @@ class Reply(models.Model):
             else:
                 result[reaction.reaction.name] = 1
         return result
+
+    @admin.display(description='Reactions')
+    def get_reactions_str(self):
+        reactions = self.get_reactions()
+        return str(reactions)
+
 
     def __str__(self):
         return self.text
