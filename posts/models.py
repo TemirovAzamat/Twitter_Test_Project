@@ -106,7 +106,7 @@ def reply_process_image(img, text=None, ext='png', font_type='arial.ttf', font_s
         img_draw = ImageDraw.Draw(image)
 
         font = ImageFont.truetype(font_type, size=font_size)
-        img_draw.text((10, 10), text, font=font)
+        img_draw.text((30, 50), text, font=font)
 
     image_io = io.BytesIO()
     image.save(image_io, ext)
