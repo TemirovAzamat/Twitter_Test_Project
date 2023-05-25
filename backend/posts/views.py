@@ -10,7 +10,6 @@ from rest_framework.pagination import LimitOffsetPagination
 from . import permissions as perm
 from . import models
 from . import serializers
-from . import paginations
 
 
 class TweetViewSet(viewsets.ModelViewSet):
@@ -18,7 +17,6 @@ class TweetViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.TweetSerializer
     permission_classes = [perm.IsAuthorOrIsAuthenticated, ]
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
-    # pagination_class = paginations.TweetNumberPagination
     pagination_class = LimitOffsetPagination
     search_fields = ['text', 'profile__user__username']
     ordering_fields = ['updated_at', 'profile__user_id']

@@ -2,11 +2,6 @@ from django.db import models as m
 from django.contrib.auth.models import AbstractUser
 
 
-# from django.contrib.auth.models import User
-
-# from django.contrib.auth import get_user_model
-# User = get_user_model()
-
 def profile_image_store(instance, filename):
     return f'profile/{instance.username}/{filename}'
 

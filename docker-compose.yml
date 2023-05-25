@@ -13,7 +13,7 @@ services:
   postgres_db:
     image: postgres:13.11
     environment:
-      - POSTGRES_DB=django_db
+      - POSTGRES_DB=django_db_test
       - POSTGRES_USER=django_user
       - POSTGRES_PASSWORD=qwerty
     volumes:

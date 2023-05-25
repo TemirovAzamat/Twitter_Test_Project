@@ -23,8 +23,6 @@ class TweetAdmin(admin.ModelAdmin):
     actions_on_bottom = True
     actions_on_top = False
     empty_value_display = '--empty--'
-    # exclude = ['profile', 'image']
-    # fields = ['text']
     fields = (('text', 'profile'), 'image')
     list_display_links = [get_short_text]
     list_editable = ['image', ]
