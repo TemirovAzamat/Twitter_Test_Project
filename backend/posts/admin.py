@@ -20,8 +20,8 @@ class TweetAdmin(admin.ModelAdmin):
     ]
     list_display = ['id', 'get_profile_fullname', get_short_text, 'get_reactions_str', 'image', 'created_at']
     date_hierarchy = 'created_at'
-    actions_on_bottom = True
-    actions_on_top = False
+    # actions_on_bottom = True
+    # actions_on_top = False
     empty_value_display = '--empty--'
     fields = (('text', 'profile'), 'image')
     list_display_links = [get_short_text]
