@@ -1,8 +1,8 @@
 venv/
 .idea/
 
-media/
-static/
+backend/media/
+backend/static/
 
 **/__pycache__/**
 
