@@ -6,6 +6,8 @@ from rest_framework.response import Response
 from rest_framework.generics import get_object_or_404
 from rest_framework import filters
 from rest_framework.pagination import LimitOffsetPagination
+from django.conf import settings
+from django.core.mail import send_mail
 
 from . import permissions as perm
 from . import models
@@ -22,6 +24,13 @@ class TweetViewSet(viewsets.ModelViewSet):
     ordering_fields = ['updated_at', 'profile__user_id']
 
     def perform_create(self, serializer):
+        send_mail(
+            "Создание публикации",
+            f"Поздравляем вы успешно опубликовали пост </br> Текст вашего поста {serializer.validated_data['text']}",
+            settings.EMAIL_HOST_USER,
+            [self.request.user.email],
+            fail_silently=False,
+        )
 
         serializer.save(profile=self.request.user.profile)
 
